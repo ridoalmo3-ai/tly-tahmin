@@ -1,0 +1,2 @@
+/fvt-data https://fvt.com.tr/fonlar/yatirim-fonlari/TLY 200
+/fvt-tahmin https://fvt.com.tr/fon-tahminleri 200
