@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TLY">
+<meta name="theme-color" content="#050505">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Crect%20width='512'%20height='512'%20rx='100'%20fill='%23000000'/%3E%3Cpolyline%20points='100,240%20190,170%20255,205%20400,90'%20fill='none'%20stroke='%2300ff88'%20stroke-width='34'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ccircle%20cx='400'%20cy='90'%20r='24'%20fill='%2300ff88'/%3E%3Ctext%20x='256'%20y='400'%20font-family='Arial,Helvetica,sans-serif'%20font-size='150'%20font-weight='700'%20fill='%23ffffff'%20text-anchor='middle'%3ETLY%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Crect%20width='512'%20height='512'%20rx='100'%20fill='%23000000'/%3E%3Cpolyline%20points='100,240%20190,170%20255,205%20400,90'%20fill='none'%20stroke='%2300ff88'%20stroke-width='34'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Ccircle%20cx='400'%20cy='90'%20r='24'%20fill='%2300ff88'/%3E%3Ctext%20x='256'%20y='400'%20font-family='Arial,Helvetica,sans-serif'%20font-size='150'%20font-weight='700'%20fill='%23ffffff'%20text-anchor='middle'%3ETLY%3C/text%3E%3C/svg%3E">
+<title>TLY Portföy</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+:root{
+--bg:#050505;--card:#0c0e11;--card2:#111418;--border:#1b2026;--border2:#242b33;
+--text:#f2f5f7;--sub:#7d8791;--sub2:#4a525a;
+--accent:#00ff88;--accent-dim:rgba(0,255,136,0.1);--accent-border:rgba(0,255,136,0.25);
+--red:#ff4d67;--red-dim:rgba(255,77,103,0.1);
+--amber:#fbbf24;--blue:#4da3ff;
+}
+html{background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px 14px 40px;letter-spacing:-0.02em;max-width:520px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 14px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;letter-spacing:.02em;color:var(--accent);background:linear-gradient(135deg,rgba(0,255,136,.16),rgba(0,255,136,.04));border:1px solid var(--accent-border);flex-shrink:0}
+.brand-name{font-size:14px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-name em{display:block;font-style:normal;font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--sub);text-transform:uppercase;margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:100px;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:1px solid}
+.chip .dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+.chip.ok{color:var(--accent);background:var(--accent-dim);border-color:var(--accent-border)}
+.chip.err{color:var(--red);background:var(--red-dim);border-color:rgba(255,77,103,.25)}
+.chip.load{color:var(--blue);background:rgba(77,163,255,.1);border-color:rgba(77,163,255,.25)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.icon-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);color:var(--sub);cursor:pointer;transition:all .2s}
+.icon-btn:active{transform:scale(.92);color:var(--text)}
+.icon-btn svg{width:17px;height:17px}
+.subbar{text-align:center;margin-bottom:14px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:7px 15px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:11px;color:var(--sub);font-weight:600;cursor:pointer;transition:all .2s;font-variant-numeric:tabular-nums}
+.badge:active{transform:scale(.96)}
+.badge svg{width:11px;height:11px;opacity:.5}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:12px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:8px}
+.card-title{font-size:10px;font-weight:800;color:var(--sub);letter-spacing:.12em;text-transform:uppercase}
+.card-sub{font-size:9px;font-weight:700;color:var(--sub2);letter-spacing:.08em;text-transform:uppercase}
+.hero{position:relative;overflow:hidden;padding:22px 20px 16px;background:linear-gradient(180deg,#0e1216 0%,var(--card) 100%)}
+.hero::after{content:'';position:absolute;top:-70px;right:-70px;width:240px;height:240px;background:radial-gradient(circle,rgba(0,255,136,.09),transparent 70%);pointer-events:none}
+.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;position:relative;z-index:1}
+.hero-label{font-size:10px;font-weight:800;color:var(--sub);letter-spacing:.12em;text-transform:uppercase}
+.main-val{font-size:44px;font-weight:800;letter-spacing:-0.035em;line-height:1;font-variant-numeric:tabular-nums;position:relative;z-index:1}
+.p-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:7px 15px;border-radius:100px;font-size:13px;font-weight:800;letter-spacing:-0.01em;font-variant-numeric:tabular-nums;position:relative;z-index:1}
+.p-badge.pos{background:var(--accent-dim);color:var(--accent)}
+.p-badge.neg{background:var(--red-dim);color:var(--red)}
+.p-badge .bd-sub{font-size:9px;font-weight:800;opacity:.7;letter-spacing:.08em;margin-left:2px}
+.spark{margin-top:18px;height:64px;position:relative;z-index:1}
+.spark svg{width:100%;height:100%;display:block}
+.spark-note{display:flex;justify-content:space-between;margin-top:6px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sub2);position:relative;z-index:1}
+.seg{display:inline-flex;background:var(--card2);border:1px solid var(--border);border-radius:100px;padding:3px;gap:2px}
+.seg-btn{border:none;background:transparent;color:var(--sub);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 13px;border-radius:100px;cursor:pointer;font-family:inherit;transition:all .2s}
+.seg-btn:active{transform:scale(.95)}
+.seg-btn.active{background:var(--accent-dim);color:var(--accent)}
+.seg.small .seg-btn{padding:4px 11px;font-size:9px}
+.fc-card{position:relative;overflow:hidden}
+.fc-bar{position:absolute;top:0;left:0;right:0;height:2px}
+.fc-card.pos .fc-bar{background:linear-gradient(90deg,var(--accent),transparent)}
+.fc-card.neg .fc-bar{background:linear-gradient(90deg,var(--red),transparent)}
+.fc-grid{display:flex;align-items:center}
+.fc-item{flex:1;text-align:center}
+.fc-label{font-size:9px;font-weight:800;color:var(--sub);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.fc-val{font-size:24px;font-weight:800;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+.fc-val.pos{color:var(--accent)}
+.fc-val.neg{color:var(--red)}
+.fc-div{width:1px;height:44px;background:var(--border)}
+.fc-note{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--sub2);text-align:center;letter-spacing:.02em}
+.tiles{display:flex;gap:8px}
+.tile{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:13px 8px;text-align:center}
+.tile-label{font-size:9px;font-weight:800;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.tile-val{font-size:13px;font-weight:800;letter-spacing:-0.01em;font-variant-numeric:tabular-nums;word-break:break-all}
+.tile-val.pos{color:var(--accent)}
+.tile-val.neg{color:var(--red)}
+.tile-val.flat{color:var(--sub)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:none;padding-bottom:0}
+.row:first-of-type{padding-top:0}
+.rl{font-size:13px;color:var(--sub);font-weight:500}
+.rv{font-size:14px;font-weight:700;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
+.rv.g{color:var(--accent)}.rv.r{color:var(--red)}.rv.o{color:var(--amber)}.rv.b{color:var(--blue)}
+.hrow{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.hrow:last-child{border-bottom:none;padding-bottom:0}
+.hrow:first-child{padding-top:0}
+.hdate{font-size:11px;color:var(--sub);font-weight:700;width:52px;flex-shrink:0}
+.hval{font-size:12px;font-weight:700;flex:1;text-align:right;font-variant-numeric:tabular-nums;margin-right:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hv-chg{font-size:10px;font-weight:800;width:78px;text-align:right;font-variant-numeric:tabular-nums;flex-shrink:0}
+.hv-chg.pos{color:var(--accent)}
+.hv-chg.neg{color:var(--red)}
+.hv-chg.flat{color:var(--sub)}
+.empty{font-size:11px;color:var(--sub2);text-align:center;padding:6px 0}
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:15px;background:var(--card);border:1px solid var(--border);border-radius:16px;color:var(--text);font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;transition:all .2s;font-family:inherit;letter-spacing:-0.01em}
+.btn:active{transform:scale(.98);background:var(--card2)}
+.btn svg{width:16px;height:16px}
+.btn.spin svg{animation:spin 1s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.footer{text-align:center;padding:18px 0 0;font-size:10px;color:var(--sub2);letter-spacing:.02em}
+.footer a{color:var(--sub);text-decoration:none;font-weight:600}
+.field{margin-bottom:14px;text-align:left}
+.field label{display:block;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-bottom:7px}
+.field input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:14px 15px;color:#fff;font-size:16px;font-weight:700;outline:none;transition:border-color .2s;font-variant-numeric:tabular-nums;font-family:inherit}
+.field input:focus{border-color:var(--accent-border)}
+.sheet-summary{display:flex;justify-content:space-between;align-items:center;background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:13px 15px;margin-top:16px}
+.sheet-summary .sl{font-size:11px;color:var(--sub);font-weight:600}
+.sheet-summary .sv{font-size:13px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.modal.open{opacity:1;pointer-events:auto}
+.sheet{width:100%;max-width:520px;background:var(--card);border:1px solid var(--border2);border-bottom:none;border-radius:26px 26px 0 0;padding:12px 22px 34px;transform:translateY(100%);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.modal.open .sheet{transform:translateY(0)}
+.sheet-handle{width:38px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 22px}
+.sheet-title{font-size:17px;font-weight:800;letter-spacing:-0.03em;margin-bottom:3px}
+.sheet-sub{font-size:11px;color:var(--sub);margin-bottom:22px}
+.sheet-actions{display:flex;gap:9px;margin-top:18px}
+.btn-ghost{flex:1;padding:14px;background:transparent;border:1px solid var(--border);border-radius:13px;color:var(--sub);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-ghost:active{transform:scale(.97)}
+.btn-save{flex:1.5;padding:14px;background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:13px;color:var(--accent);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.06em}
+.btn-save:active{transform:scale(.97);background:rgba(0,255,136,.18)}
+.onboard{position:fixed;inset:0;z-index:300;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;transition:opacity .35s ease}
+.onboard.hide{opacity:0;pointer-events:none}
+.ob-card{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:30px 22px;text-align:center;animation:fadeIn .5s cubic-bezier(.16,1,.3,1)}
+.ob-mark{width:54px;height:54px;margin:0 auto 14px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:var(--accent);background:linear-gradient(135deg,rgba(0,255,136,.16),rgba(0,255,136,.04));border:1px solid var(--accent-border)}
+.ob-title{font-size:21px;font-weight:800;letter-spacing:-0.03em;margin-bottom:5px}
+.ob-sub{font-size:11px;color:var(--sub);margin-bottom:24px;line-height:1.5}
+.ob-error{display:none;font-size:11px;color:var(--red);margin-top:12px;font-weight:700}
+.ob-error.show{display:block}
+.ob-btn{width:100%;margin-top:16px;padding:16px;flex:none}
+.ob-lock{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-size:10px;color:var(--sub2);font-weight:600}
+.ob-lock svg{width:11px;height:11px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:fadeIn .45s cubic-bezier(.16,1,.3,1)}
+@media (min-width:480px){.main-val{font-size:52px}.fc-val{font-size:28px}}
+</style>
+</head>
+<body>
+
+<div class="onboard" id="onboard">
+<div class="ob-card">
+<div class="ob-mark">TLY</div>
+<h2 class="ob-title">Portföyünü Tanıyalım</h2>
+<p class="ob-sub">Bu cihazda ilk açılış.<br>Bilgilerin yalnızca bu cihazda/tarayıcıda saklanır.</p>
+<div class="field"><label>Adet (Lot)</label><input id="obAdet" type="number" inputmode="decimal" step="any" min="0" placeholder="Örn: 50" oninput="obSummary()"></div>
+<div class="field"><label>Birim Maliyet (₺)</label><input id="obMaliyet" type="number" inputmode="decimal" step="any" min="0" placeholder="Örn: 2635.30" oninput="obSummary()"></div>
+<div class="field"><label>Stopaj Oranı (%)</label><input id="obStopaj" type="number" inputmode="decimal" step="any" min="0" max="100" value="17.5" oninput="obSummary()"></div>
+<div class="sheet-summary"><span class="sl">Toplam Maliyet</span><span class="sv" id="obTotal">--</span></div>
+<div class="ob-error" id="obError">Lütfen geçerli bir adet ve birim maliyet gir.</div>
+<button class="btn-save ob-btn" onclick="saveOnboard()">BAŞLA</button>
+<div class="ob-lock">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+Veriler cihazından dışarı çıkmaz
+</div>
+</div>
+</div>
+
+<header class="topbar">
+<div class="brand">
+<span class="brand-mark">TLY</span>
+<span class="brand-name">TERA PORTFÖY<em>Birinci Serbest Fon</em></span>
+</div>
+<div class="top-actions">
+<div class="chip load" id="stChip"><span class="dot"></span><span id="stTxt">BAĞLANIYOR</span></div>
+<button class="icon-btn" onclick="openSettings()" aria-label="Ayarlar">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+</button>
+</div>
+</header>
+
+<div class="subbar">
+<span class="badge" onclick="openSettings()">
+<span id="badgeTxt">--</span>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+</span>
+</div>
+
+<section class="card hero fade">
+<div class="hero-top">
+<span class="hero-label" id="mainLabel">NET DEĞER</span>
+<div class="seg" id="modeSeg">
+<button class="seg-btn" onclick="setTaxMode(false)">Brüt</button>
+<button class="seg-btn active" onclick="setTaxMode(true)">Net</button>
+</div>
+</div>
+<div class="main-val" id="netVal">--</div>
+<div class="p-badge pos" id="pBadge"><span id="pIcon">↑</span><span id="pTxt">--</span><span class="bd-sub">GÜNLÜK</span></div>
+<div class="spark" id="spark"></div>
+<div class="spark-note"><span id="sparkRange">SON 1 AY</span><span id="sparkChg">--</span></div>
+</section>
+
+<section class="card fc-card pos fade" id="fcCard">
+<div class="fc-bar"></div>
+<div class="card-head"><span class="card-title">Günün Tahmini</span><span class="card-sub">AI • FVT</span></div>
+<div class="fc-grid">
+<div class="fc-item"><div class="fc-label">Yüzde</div><div class="fc-val pos" id="fcPct">--</div></div>
+<div class="fc-div"></div>
+<div class="fc-item"><div class="fc-label">TL Karşılığı</div><div class="fc-val pos" id="fcTL">--</div></div>
+</div>
+<div class="fc-note" id="fcNote">Portföy değerine dahil değildir</div>
+</section>
+
+<section class="card fade">
+<div class="card-head">
+<span class="card-title">Getiri Bilgileri</span>
+<div class="seg small" id="retSeg">
+<button class="seg-btn active" onclick="setRetMode(false)">%</button>
+<button class="seg-btn" onclick="setRetMode(true)">₺</button>
+</div>
+</div>
+<div class="tiles" id="retRows"><div class="empty">Hesaplanıyor...</div></div>
+</section>
+
+<section class="card fade">
+<div class="card-head"><span class="card-title">Detaylar</span></div>
+<div class="row"><span class="rl">Fiyat</span><span class="rv b" id="price">--</span></div>
+<div class="row"><span class="rl">Portföy Değeri</span><span class="rv" id="gross">--</span></div>
+<div class="row"><span class="rl">Maliyet</span><span class="rv" id="cost">--</span></div>
+<div class="row"><span class="rl">Toplam Kâr</span><span class="rv g" id="profit">--</span></div>
+<div class="row"><span class="rl" id="stopajRow">Stopaj (%17,5)</span><span class="rv o" id="tax">--</span></div>
+</section>
+
+<section class="card fade">
+<div class="card-head">
+<span class="card-title">Günlük Performans</span>
+<div class="seg small" id="histSeg">
+<button class="seg-btn active" onclick="setHistMode(false)">%</button>
+<button class="seg-btn" onclick="setHistMode(true)">₺</button>
+</div>
+</div>
+<div id="histRows"><div class="empty">Yükleniyor...</div></div>
+</section>
+
+<button class="btn" id="btn" onclick="fetchAll()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+Yenile
+</button>
+
+<div class="footer">
+<p>Son Güncelleme: <span id="upd">--</span></p>
+<p style="margin-top:5px">Kaynak: <a href="https://fvt.com.tr/fonlar/yatirim-fonlari/TLY" target="_blank">fvt.com.tr</a> • 60 sn'de bir otomatik yenilenir</p>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeSettings()">
+<div class="sheet">
+<div class="sheet-handle"></div>
+<div class="sheet-title">Portföy Bilgileri</div>
+<div class="sheet-sub">Adet, birim maliyet ve stopaj oranını güncelle</div>
+<div class="field"><label>Adet (Lot)</label><input id="inpAdet" type="number" inputmode="decimal" step="any" min="0" placeholder="50"></div>
+<div class="field"><label>Birim Maliyet (₺)</label><input id="inpMaliyet" type="number" inputmode="decimal" step="any" min="0" placeholder="2635.30"></div>
+<div class="field"><label>Stopaj Oranı (%)</label><input id="inpStopaj" type="number" inputmode="decimal" step="any" min="0" max="100" placeholder="17.5"></div>
+<div class="sheet-summary"><span class="sl">Toplam Maliyet</span><span class="sv" id="modalTotal">--</span></div>
+<div class="sheet-actions">
+<button class="btn-ghost" onclick="closeSettings()">İptal</button>
+<button class="btn-save" onclick="saveSettings()">Kaydet</button>
+</div>
+</div>
+</div>
+
+<script>
+var ADET=133, MALIYET=2635.30, STOPAJ_PCT=17.5;
+var FVT_URL='https://fvt.com.tr/fonlar/yatirim-fonlari/TLY';
+var currentPrice=null, currentForecast=null, currentDailyPct=null;
+var RET_TL=false, TAX_ON=true, HIST_TL=false;
+
+/* ===== TARİH YARDIMCILARI ===== */
+function localDateKey(d){
+var x=d||new Date();
+var m=x.getMonth()+1,dd=x.getDate();
+return x.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd;
+}
+/* FVT tarihi = yayın günü; fiyatın ait olduğu gün = bir önceki İŞLEM günü */
+function shiftBizDayBack(dstr){
+var p=dstr.split('-');
+var dt=new Date(+p[0],+p[1]-1,+p[2]);
+dt.setDate(dt.getDate()-1);
+var wd=dt.getDay();
+if(wd===6)dt.setDate(dt.getDate()-1);
+else if(wd===0)dt.setDate(dt.getDate()-2);
+return localDateKey(dt);
+}
+function sortByDate(a,b){return a.d<b.d?-1:(a.d>b.d?1:0)}
+
+/* ===== FVT RESMİ GEÇMİŞ (valör tarihine çevrilmiş) ===== */
+var BASE_RAW=[
+["2026-08-03",7882.303692,0.8274],["2026-08-04",7940.311602,0.7359],["2026-08-05",8023.067028,1.0422],
+["2026-08-06",8277.921881,3.1765],["2026-08-07",8333.532830,0.6718],["2026-08-10",8403.403903,0.8384],
+["2026-08-11",8444.045915,0.4836],["2026-08-12",8458.606687,0.1724],["2026-08-13",8534.110427,0.8926],
+["2026-08-14",8591.591231,0.6735],["2026-08-17",8611.792448,0.2351],["2026-08-18",8690.327521,0.9119],
+["2026-08-19",8733.161775,0.4929],["2026-08-20",8819.345884,0.9869],["2026-08-21",8865.329788,0.5214],
+["2026-08-24",8907.411297,0.4747],["2026-08-25",8948.481317,0.4611],["2026-08-26",9022.019037,0.8218],
+["2026-08-27",9113.796697,1.0173],["2026-08-28",9140.087628,0.2885],["2026-08-31",9145.580810,0.0601],
+["2026-09-01",9200.361325,0.5990],["2026-09-02",9293.933893,1.0171],["2026-09-03",9348.227793,0.5842],
+["2026-09-04",9440.833918,0.9906],["2026-09-07",9495.638007,0.5805],["2026-09-08",9593.905146,1.0349],
+["2026-09-09",9703.810949,1.1456],["2026-09-10",9770.186752,0.6840],["2026-09-11",9805.324940,0.3596]
+];
+var BASE_HISTORY=[];
+for(var b0i=0;b0i<BASE_RAW.length;b0i++){BASE_HISTORY.push([shiftBizDayBack(BASE_RAW[b0i][0]),BASE_RAW[b0i][1],BASE_RAW[b0i][2]]);}
+var BASE_MAP={},BASE_PRICE={};
+for(var bi=0;bi<BASE_HISTORY.length;bi++){BASE_MAP[BASE_HISTORY[bi][0]]=BASE_HISTORY[bi];BASE_PRICE[BASE_HISTORY[bi][1].toFixed(6)]=BASE_HISTORY[bi];}
+
+try{var tv=localStorage.getItem('tly_tax');if(tv!==null)TAX_ON=(tv==='1');}catch(e){}
+try{var rv=localStorage.getItem('tly_retmode');if(rv!==null)RET_TL=(rv==='1');}catch(e){}
+try{var hv=localStorage.getItem('tly_histmode');if(hv!==null)HIST_TL=(hv==='1');}catch(e){}
+
+/* ===== GEÇMİŞ DEPO + ONARIM ===== */
+function loadPriceStore(){
+var store=null;
+try{var s=JSON.parse(localStorage.getItem('tly_pricehist'));if(Array.isArray(s)&&s.length)store=s;}catch(e){}
+if(!store){
+store=[];
+for(var i=0;i<BASE_HISTORY.length;i++)store.push({d:BASE_HISTORY[i][0],p:BASE_HISTORY[i][1],g:BASE_HISTORY[i][2]});
+return store;
+}
+/* Tek seferlik migrasyon: eski (yayın tarihli) kayıtları bir işlem günü geriye çek */
+try{
+if(!localStorage.getItem('tly_store_v2')){
+for(var m0=0;m0<store.length;m0++){
+var e0=store[m0];
+if(!BASE_MAP[e0.d]&&!BASE_PRICE[e0.p.toFixed(6)]){e0.d=shiftBizDayBack(e0.d);}
+}
+localStorage.setItem('tly_store_v2','1');
+}
+}catch(e){}
+/* Resmî günleri FVT değerlerine sabitle */
+for(var j=0;j<store.length;j++){
+var bb0=BASE_MAP[store[j].d];
+if(bb0){store[j].p=bb0[1];store[j].g=bb0[2];}
+}
+/* Fiyattan tanı: aynı fiyat yanlış tarihteyse resmî (valör) tarihine taşı */
+for(var k=0;k<BASE_HISTORY.length;k++){
+var bd=BASE_HISTORY[k][0],bp=BASE_HISTORY[k][1];
+for(var q=0;q<store.length;q++){
+if(store[q].d!==bd&&Math.abs(store[q].p-bp)<1e-6){store[q].d=bd;store[q].g=BASE_HISTORY[k][2];break;}
+}
+}
+store.sort(sortByDate);
+var map={};
+for(q=0;q<store.length;q++){
+var e=store[q];
+if(!map[e.d]){map[e.d]=e;}
+else{
+var bb=BASE_MAP[e.d];
+if(bb&&Math.abs(e.p-bb[1])<1e-6&&Math.abs(map[e.d].p-bb[1])>=1e-6){map[e.d]=e;}
+}
+}
+var cleaned=[];
+for(var d3 in map)cleaned.push(map[d3]);
+cleaned.sort(sortByDate);
+store=cleaned;
+for(q=0;q<store.length;q++){
+if(!BASE_MAP[store[q].d]&&q>0&&store[q-1].p>0){
+store[q].g=((store[q].p-store[q-1].p)/store[q-1].p)*100;
+}
+}
+return store;
+}
+var PRICE_STORE=loadPriceStore();
+function savePriceStore(){try{localStorage.setItem('tly_pricehist',JSON.stringify(PRICE_STORE))}catch(e){}}
+
+function mergePriceEntries(arr){
+if(!arr||!arr.length)return;
+var changed=false;
+for(var i=0;i<arr.length;i++){
+var e=arr[i],found=false;
+for(var j=0;j<PRICE_STORE.length;j++){if(PRICE_STORE[j].d===e.d){found=true;break;}}
+if(!found){PRICE_STORE.push({d:e.d,p:e.p,g:e.g});changed=true;}
+}
+if(changed){
+PRICE_STORE.sort(sortByDate);
+for(j=0;j<PRICE_STORE.length;j++){
+if(!BASE_MAP[PRICE_STORE[j].d]&&j>0&&PRICE_STORE[j-1].p>0){
+PRICE_STORE[j].g=((PRICE_STORE[j].p-PRICE_STORE[j-1].p)/PRICE_STORE[j-1].p)*100;
+}
+}
+savePriceStore();renderReturns();renderSpark();renderHistory();
+}
+}
+
+/* Canlı fiyat = bugünün yayını → valör bir önceki işlem günü */
+function upsertToday(price){
+if(!price||price<=0)return;
+var key=shiftBizDayBack(localDateKey());
+var idx=-1;
+for(var j=0;j<PRICE_STORE.length;j++){if(PRICE_STORE[j].d===key){idx=j;break;}}
+if(idx>=0){
+if(BASE_MAP[key])return;
+PRICE_STORE[idx].p=price;
+if(idx>0&&PRICE_STORE[idx-1].p>0)PRICE_STORE[idx].g=((price-PRICE_STORE[idx-1].p)/PRICE_STORE[idx-1].p)*100;
+}else{
+var maxD=PRICE_STORE.length?PRICE_STORE[PRICE_STORE.length-1].d:null;
+if(maxD&&key<=maxD)return;
+var prev=PRICE_STORE[PRICE_STORE.length-1];
+var g=(prev&&prev.p>0)?((price-prev.p)/prev.p)*100:0;
+PRICE_STORE.push({d:key,p:price,g:g});
+PRICE_STORE.sort(sortByDate);
+}
+savePriceStore();renderReturns();renderSpark();renderHistory();
+}
+
+function tl(v){return new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',minimumFractionDigits:2,maximumFractionDigits:2}).format(v)}
+function fp(v){return new Intl.NumberFormat('tr-TR',{minimumFractionDigits:4,maximumFractionDigits:4}).format(v)+' ₺'}
+function log(m){console.log(m)}
+function netPct(v){return TAX_ON? v*(1-STOPAJ_PCT/100) : v;}
+
+function hasSavedSettings(){
+try{var s=JSON.parse(localStorage.getItem('tly_settings'));return !!(s&&s.adet>0&&s.maliyet>0);}catch(e){return false;}
+}
+function obSummary(){
+var a=parseFloat(String(document.getElementById('obAdet').value).replace(',','.'))||0;
+var m=parseFloat(String(document.getElementById('obMaliyet').value).replace(',','.'))||0;
+document.getElementById('obTotal').textContent=(a>0&&m>0)?tl(a*m):'--';
+}
+function saveOnboard(){
+var a=parseFloat(String(document.getElementById('obAdet').value).replace(',','.'));
+var m=parseFloat(String(document.getElementById('obMaliyet').value).replace(',','.'));
+var s=parseFloat(String(document.getElementById('obStopaj').value).replace(',','.'));
+var err=document.getElementById('obError');
+if(!a||a<=0||!m||m<=0){err.classList.add('show');return;}
+err.classList.remove('show');
+if(isNaN(s)||s<0||s>100)s=17.5;
+try{localStorage.setItem('tly_settings',JSON.stringify({adet:a,maliyet:m,stopaj:s}));}catch(e){}
+loadSettings();
+document.getElementById('onboard').classList.add('hide');
+renderHistory();renderReturns();renderSpark();
+if(currentPrice!==null)updateUI();
+}
+
+function setTaxMode(on){
+TAX_ON=on;
+try{localStorage.setItem('tly_tax',on?'1':'0')}catch(e){}
+applyModeUI();renderHistory();renderReturns();renderSpark();
+if(currentPrice!==null)updateUI();
+}
+function applyModeUI(){
+var b=document.getElementById('modeSeg').children;
+b[0].classList.toggle('active',!TAX_ON);
+b[1].classList.toggle('active',TAX_ON);
+}
+function setRetMode(on){
+RET_TL=on;
+try{localStorage.setItem('tly_retmode',on?'1':'0')}catch(e){}
+var b=document.getElementById('retSeg').children;
+b[0].classList.toggle('active',!on);
+b[1].classList.toggle('active',on);
+renderReturns();
+}
+function setHistMode(on){
+HIST_TL=on;
+try{localStorage.setItem('tly_histmode',on?'1':'0')}catch(e){}
+applyHistUI();renderHistory();
+}
+function applyHistUI(){
+var b=document.getElementById('histSeg').children;
+b[0].classList.toggle('active',!HIST_TL);
+b[1].classList.toggle('active',HIST_TL);
+}
+
+function loadSettings(){
+try{
+var s=JSON.parse(localStorage.getItem('tly_settings'));
+if(s){
+if(s.adet>0)ADET=s.adet;
+if(s.maliyet>0)MALIYET=s.maliyet;
+if(s.stopaj>=0&&s.stopaj<=100)STOPAJ_PCT=s.stopaj;
+}
+}catch(e){}
+updateBadge();updateStopajLabel();
+}
+function updateBadge(){document.getElementById('badgeTxt').textContent=ADET+' Adet • Maliyet: '+tl(MALIYET)}
+function updateStopajLabel(){document.getElementById('stopajRow').textContent='Stopaj (%'+String(STOPAJ_PCT).replace('.',',')+')'}
+function openSettings(){
+document.getElementById('inpAdet').value=ADET;
+document.getElementById('inpMaliyet').value=MALIYET;
+document.getElementById('inpStopaj').value=STOPAJ_PCT;
+updateModalSummary();
+document.getElementById('modal').classList.add('open');
+}
+function closeSettings(){document.getElementById('modal').classList.remove('open')}
+function saveSettings(){
+var a=parseFloat(String(document.getElementById('inpAdet').value).replace(',','.'));
+var m=parseFloat(String(document.getElementById('inpMaliyet').value).replace(',','.'));
+var s=parseFloat(String(document.getElementById('inpStopaj').value).replace(',','.'));
+if(a>0)ADET=a;
+if(m>0)MALIYET=m;
+if(!isNaN(s)&&s>=0&&s<=100)STOPAJ_PCT=s;
+try{localStorage.setItem('tly_settings',JSON.stringify({adet:ADET,maliyet:MALIYET,stopaj:STOPAJ_PCT}))}catch(e){}
+updateBadge();updateStopajLabel();closeSettings();renderHistory();renderReturns();renderSpark();
+if(currentPrice!==null)updateUI();
+}
+function updateModalSummary(){
+var a=parseFloat(String(document.getElementById('inpAdet').value).replace(',','.'))||0;
+var m=parseFloat(String(document.getElementById('inpMaliyet').value).replace(',','.'))||0;
+document.getElementById('modalTotal').textContent=tl(a*m);
+}
+
+function getSparkRange(){
+if(!PRICE_STORE.length)return null;
+var lastD=PRICE_STORE[PRICE_STORE.length-1].d;
+var ref=new Date(lastD+'T12:00:00');
+var tgt=new Date(ref);
+tgt.setMonth(tgt.getMonth()-1);
+var ts=localDateKey(tgt);
+var filtered=[];
+for(var i=0;i<PRICE_STORE.length;i++){
+if(PRICE_STORE[i].d>=ts)filtered.push(PRICE_STORE[i]);
+}
+if(filtered.length<2)return null;
+var base=filtered[0].p;
+var cur=filtered[filtered.length-1].p;
+return {points:filtered,pct:((cur/base)-1)*100};
+}
+function renderSpark(){
+var el=document.getElementById('spark');
+if(!el)return;
+var range=getSparkRange();
+if(!range){el.innerHTML='';document.getElementById('sparkChg').textContent='--';document.getElementById('sparkRange').textContent='SON 1 AY';return;}
+var pts=range.points,ps=[],i;
+for(i=0;i<pts.length;i++)ps.push(pts[i].p);
+var min=Math.min.apply(null,ps),max=Math.max.apply(null,ps),r=(max-min)||1;
+var W=300,H=64,P=3,coords=[];
+for(i=0;i<ps.length;i++){
+coords.push([P+i*(W-2*P)/(ps.length-1),H-P-((ps[i]-min)/r)*(H-2*P)]);
+}
+var d='';
+for(i=0;i<coords.length;i++){d+=(i===0?'M':'L')+coords[i][0].toFixed(1)+','+coords[i][1].toFixed(1);}
+var area=d+'L'+(W-P)+','+H+'L'+P+','+H+'Z';
+var up=range.pct>=0;
+var col=up?'#00ff88':'#ff4d67';
+var lc=coords[coords.length-1];
+el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity="0.22"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs><path d="'+area+'" fill="url(#sg)"/><path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="'+lc[0].toFixed(1)+'" cy="'+lc[1].toFixed(1)+'" r="3" fill="'+col+'"/></svg>';
+var pctD=netPct(range.pct);
+var sc=document.getElementById('sparkChg');
+sc.textContent=(pctD>=0?'+':'')+pctD.toFixed(2).replace('.',',')+'%';
+sc.style.color=col;
+document.getElementById('sparkRange').textContent='SON 1 AY ('+pts.length+' İŞLEM GÜNÜ)';
+}
+
+function findBasePrice(store,refStr,type,n){
+var ref=new Date(refStr+'T12:00:00');
+var t=new Date(ref);
+if(type==='d')t.setDate(t.getDate()-n);else t.setMonth(t.getMonth()-n);
+var ts=localDateKey(t);
+for(var i=store.length-1;i>=0;i--){if(store[i].d<=ts)return store[i].p;}
+return null;
+}
+function renderReturns(){
+var box=document.getElementById('retRows');
+if(!box)return;
+if(!PRICE_STORE.length){box.innerHTML='<div class="empty">Veri yok</div>';return;}
+var current=PRICE_STORE[PRICE_STORE.length-1].p;
+var lastD=PRICE_STORE[PRICE_STORE.length-1].d;
+var periods=[{l:'1 Haftalık',t:'d',n:7},{l:'2 Haftalık',t:'d',n:14},{l:'1 Aylık',t:'m',n:1}];
+var html='';
+for(var i=0;i<periods.length;i++){
+var base=findBasePrice(PRICE_STORE,lastD,periods[i].t,periods[i].n);
+var v=(base&&base>0)?((current/base)-1)*100:null;
+var val;
+if(v===null)val='<div class="tile-val flat">—</div>';
+else if(!RET_TL){
+var vD=netPct(v);
+val='<div class="tile-val '+(vD>=0?'pos':'neg')+'">'+(vD<0?'-':'')+Math.abs(vD).toFixed(4).replace('.',',')+'%</div>';
+}else{
+var G=current*ADET,P=0;
+if(G>0){var S=G/(1+v/100);P=G-S;P=netPct(P);}
+val='<div class="tile-val '+(P>=0?'pos':'neg')+'">'+(P>=0?'+':'')+tl(P)+'</div>';
+}
+html+='<div class="tile"><div class="tile-label">'+periods[i].l+'</div>'+val+'</div>';
+}
+box.innerHTML=html;
+}
+
+function renderHistory(){
+var box=document.getElementById('histRows');
+if(!box)return;
+if(!PRICE_STORE.length){box.innerHTML='<div class="empty">Veri yok</div>';return;}
+var last=PRICE_STORE.slice(-7).reverse();
+var totalCost=MALIYET*ADET;
+var html='';
+for(var i=0;i<last.length;i++){
+var e=last[i];
+var idx=PRICE_STORE.indexOf(e);
+var prev=idx>0?PRICE_STORE[idx-1]:null;
+var grossV=e.p*ADET;
+var profitV=grossV-totalCost;
+var taxV=profitV>0?profitV*(STOPAJ_PCT/100):0;
+var val=TAX_ON?(grossV-taxV):grossV;
+var third;
+if(HIST_TL){
+if(prev&&prev.p>0){
+var dg=ADET*(e.p-prev.p);
+var dn=TAX_ON?dg*(1-STOPAJ_PCT/100):dg;
+third='<span class="hv-chg '+(dn>=0?'pos':'neg')+'">'+(dn>=0?'+':'')+tl(dn)+'</span>';
+}else{
+third='<span class="hv-chg flat">—</span>';
+}
+}else{
+var g=e.g||0;
+var gD=netPct(g);
+third='<span class="hv-chg '+(gD>=0?'pos':'neg')+'">'+(gD>=0?'+':'')+gD.toFixed(2).replace('.',',')+'%</span>';
+}
+var lab=new Date(e.d+'T12:00:00').toLocaleDateString('tr-TR',{day:'2-digit',month:'short'});
+html+='<div class="hrow"><span class="hdate">'+lab+'</span><span class="hval">'+tl(val)+'</span>'+third+'</div>';
+}
+box.innerHTML=html;
+}
+
+function fetchX(url,ms){
+return new Promise(function(ok,fail){
+var x=new XMLHttpRequest();
+x.open('GET',url,true);x.timeout=ms;
+x.onload=function(){if(x.status>=200&&x.status<400)ok(x.responseText);else fail(new Error('HTTP '+x.status));};
+x.onerror=function(){fail(new Error('Ağ'))};
+x.ontimeout=function(){fail(new Error('Zaman aşımı'))};
+x.send();
+});
+}
+function saveCache(d){try{localStorage.setItem('tly_cache',JSON.stringify(d))}catch(e){}}
+function loadCache(){try{var c=localStorage.getItem('tly_cache');return c?JSON.parse(c):null}catch(e){return null}}
+function cleanText(t){return String(t).replace(/\\"/g,'"')}
+function parseExtras(text){
+var clean=cleanText(text);
+var re=/"fiyat"\s*:\s*"([\d.]+)","tarih"\s*:\s*"(\d{4}-\d{2}-\d{2})","getiri"\s*:\s*"(-?[\d.]+)"/g;
+var m,arr=[];
+while((m=re.exec(clean))!==null){arr.push({d:shiftBizDayBack(m[2]),p:parseFloat(m[1]),g:parseFloat(m[3])});}
+if(arr.length)mergePriceEntries(arr);
+}
+function fetchAll(){
+document.getElementById('btn').classList.add('spin');
+setStatus('load','BAĞLANIYOR');
+fetchPrice();fetchForecast();
+}
+function fetchPrice(){
+var u=encodeURIComponent(FVT_URL);
+var sources=[
+{name:'Netlify',fn:function(){return fetchX('/fvt-data',10000)}},
+{name:'Jina',fn:function(){return fetchX('https://r.jina.ai/'+FVT_URL,20000)}},
+{name:'AllOrigins',fn:function(){return fetchX('https://api.allorigins.win/raw?url='+u,10000)}},
+{name:'CodeTabs',fn:function(){return fetchX('https://api.codetabs.com/v1/proxy?quest='+u,10000)}}
+];
+(function trySrc(i){
+if(i>=sources.length){
+var c=loadCache();
+if(c&&c.price>100){currentPrice=c.price;if(c.daily!==null&&c.daily!==undefined)currentDailyPct=c.daily;updateUI();}
+return;
+}
+sources[i].fn().then(function(text){
+parseExtras(text);
+var clean=cleanText(text);
+var mg=clean.match(/"getiri"\s*:\s*"(-?[\d.]+)"/);
+if(mg)currentDailyPct=parseFloat(mg[1]);
+var m=clean.match(/"fiyat"\s*:\s*"([\d.]+)"/);
+if(m){var p=parseFloat(m[1]);if(p>100){log(sources[i].name+':fiyat');currentPrice=p;updateUI();return;}}
+var m2=clean.match(/₺[^0-9]*([\d]{1,3}(?:[\.,][\d]{3})*[\.,][\d]+)/);
+if(m2){var p2=parseFloat(m2[1].replace(/\./g,'').replace(',','.'));if(p2>100){log(sources[i].name+':fiyat2');currentPrice=p2;updateUI();return;}}
+trySrc(i+1);
+}).catch(function(){trySrc(i+1);});
+})(0);
+}
+function fetchForecast(){
+var u=encodeURIComponent(FVT_URL);
+var sources=[
+{name:'Jina-F',fn:function(){return fetchX('https://r.jina.ai/'+FVT_URL,20000)}},
+{name:'Jina-T',fn:function(){return fetchX('https://r.jina.ai/https://fvt.com.tr/fon-tahminleri',20000)}},
+{name:'Netlify-T',fn:function(){return fetchX('/fvt-tahmin',10000)}},
+{name:'AllOrigins-T',fn:function(){return fetchX('https://api.allorigins.win/raw?url='+encodeURIComponent('https://fvt.com.tr/fon-tahminleri'),12000)}}
+];
+(function trySrc(i){
+if(i>=sources.length){
+var c=loadCache();
+if(c&&c.forecast!==null&&c.forecast!==undefined){currentForecast=c.forecast;updateUI();}
+else{currentForecast=0;updateUI();}
+return;
+}
+sources[i].fn().then(function(text){
+var clean=cleanText(text),v=null;
+var m1=clean.match(/G[üu]n[üu]n\s+Tahmini[\s\S]{0,500}?([\d]+[.,][\d]+)\s*<!---->%/i);
+if(m1)v=parseFloat(m1[1].replace(',','.'));
+if(v===null||v===0){
+var m1b=clean.match(/G[üu]n[üu]n\s+Tahmini[\s\S]{0,500}?([\d]+[.,][\d]+)\s*%/i);
+if(m1b)v=parseFloat(m1b[1].replace(',','.'));
+}
+if(v!==null&&v>0.01){log(sources[i].name+':'+v+'%');currentForecast=v;updateUI();}
+else trySrc(i+1);
+}).catch(function(){trySrc(i+1);});
+})(0);
+}
+
+function updateUI(){
+if(currentPrice===null)return;
+var price=currentPrice;
+var fc=currentForecast!==null&&currentForecast!==undefined?currentForecast:0;
+var totalCost=MALIYET*ADET;
+var gross=price*ADET;
+var profit=gross-totalCost;
+var tax=profit>0?profit*(STOPAJ_PCT/100):0;
+var net=gross-tax;
+
+var dPct=currentDailyPct;
+if(dPct===null||dPct===undefined){
+var key=shiftBizDayBack(localDateKey());
+var idx=-1;
+for(var j=0;j<PRICE_STORE.length;j++){if(PRICE_STORE[j].d===key){idx=j;break;}}
+var prevE=idx>0?PRICE_STORE[idx-1]:(PRICE_STORE.length?PRICE_STORE[PRICE_STORE.length-1]:null);
+if(prevE&&prevE.p>0&&prevE.d!==key)dPct=((price/prevE.p)-1)*100;
+else if(prevE&&prevE.d===key&&idx>0)dPct=PRICE_STORE[idx].g;
+else dPct=0;
+}
+var prevClose=price/(1+dPct/100);
+var dailyGross=ADET*(price-prevClose);
+var dailyTL=TAX_ON? dailyGross*(1-STOPAJ_PCT/100) : dailyGross;
+var dailyPctShown=netPct(dPct);
+
+var fcDisp=netPct(fc);
+var fcTLdisp=gross*(fcDisp/100);
+var pos=fcTLdisp>=0;
+var mainVal=TAX_ON?net:gross;
+
+saveCache({price:price,forecast:fc,daily:currentDailyPct});
+upsertToday(price);
+
+document.getElementById('netVal').textContent=tl(mainVal);
+document.getElementById('mainLabel').textContent=TAX_ON?'NET DEĞER • STOPAJ SONRASI':'BRÜT DEĞER • STOPAJ ÖNCESİ';
+
+var pb=document.getElementById('pBadge');
+var pi2=document.getElementById('pIcon');
+var pt=document.getElementById('pTxt');
+if(dailyTL>=0){
+pb.className='p-badge pos';pi2.textContent='↑';
+pt.textContent='+'+tl(dailyTL)+' (+'+dailyPctShown.toFixed(2).replace('.',',')+'%)';
+}else{
+pb.className='p-badge neg';pi2.textContent='↓';
+pt.textContent=tl(dailyTL)+' ('+dailyPctShown.toFixed(2).replace('.',',')+'%)';
+}
+
+document.getElementById('fcCard').className='card fc-card fade '+(pos?'pos':'neg');
+var fp2=document.getElementById('fcPct');
+fp2.textContent=(pos?'+':'')+fcDisp.toFixed(3)+'%';
+fp2.className='fc-val '+(pos?'pos':'neg');
+var ft=document.getElementById('fcTL');
+ft.textContent=(pos?'+':'')+tl(fcTLdisp);
+ft.className='fc-val '+(pos?'pos':'neg');
+document.getElementById('fcNote').textContent=(TAX_ON?'Stopaj sonrası':'Brüt')+' • Portföy değerine dahil değildir';
+
+document.getElementById('price').textContent=fp(price);
+document.getElementById('gross').textContent=tl(mainVal);
+document.getElementById('cost').textContent=tl(totalCost);
+document.getElementById('profit').textContent=(profit>=0?'+':'')+tl(profit);
+document.getElementById('profit').className='rv '+(profit>=0?'g':'r');
+document.getElementById('tax').textContent='-'+tl(tax);
+
+document.getElementById('upd').textContent=new Date().toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+renderReturns();
+setStatus('ok','CANLI');
+document.getElementById('btn').classList.remove('spin');
+}
+function setStatus(t,msg){
+document.getElementById('stChip').className='chip '+t;
+document.getElementById('stTxt').textContent=msg;
+}
+
+var firstRun=!hasSavedSettings();
+loadSettings();
+applyModeUI();
+setRetMode(RET_TL);
+applyHistUI();
+savePriceStore();
+renderHistory();
+renderReturns();
+renderSpark();
+if(!firstRun){document.getElementById('onboard').classList.add('hide');}
+document.getElementById('inpAdet').addEventListener('input',updateModalSummary);
+document.getElementById('inpMaliyet').addEventListener('input',updateModalSummary);
+fetchAll();
+setInterval(fetchAll,60000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)fetchAll()});
+</script>
+</body>
+</html>
