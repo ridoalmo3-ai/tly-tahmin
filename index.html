@@ -14,13 +14,7 @@
 <title>TLY Portföy</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-:root{
---bg:#050505;--card:#0c0e11;--card2:#111418;--border:#1b2026;--border2:#242b33;
---text:#f2f5f7;--sub:#7d8791;--sub2:#4a525a;
---accent:#00ff88;--accent-dim:rgba(0,255,136,0.1);--accent-border:rgba(0,255,136,0.25);
---red:#ff4d67;--red-dim:rgba(255,77,103,0.1);
---amber:#fbbf24;--blue:#4da3ff;
-}
+:root{--bg:#050505;--card:#0c0e11;--card2:#111418;--border:#1b2026;--border2:#242b33;--text:#f2f5f7;--sub:#7d8791;--sub2:#4a525a;--accent:#00ff88;--accent-dim:rgba(0,255,136,0.1);--accent-border:rgba(0,255,136,0.25);--red:#ff4d67;--red-dim:rgba(255,77,103,0.1);--amber:#fbbf24;--blue:#4da3ff}
 html{background:var(--bg)}
 body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px 14px 40px;letter-spacing:-0.02em;max-width:520px;margin:0 auto}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 14px}
@@ -638,10 +632,9 @@ fetchPrice();fetchForecast();
 function fetchPrice(){
 var u=encodeURIComponent(FVT_URL);
 var sources=[
-{name:'Netlify',fn:function(){return fetchX('/fvt-data',10000)}},
 {name:'Jina',fn:function(){return fetchX('https://r.jina.ai/'+FVT_URL,20000)}},
-{name:'AllOrigins',fn:function(){return fetchX('https://api.allorigins.win/raw?url='+u,10000)}},
-{name:'CodeTabs',fn:function(){return fetchX('https://api.codetabs.com/v1/proxy?quest='+u,10000)}}
+{name:'CodeTabs',fn:function(){return fetchX('https://api.codetabs.com/v1/proxy?quest='+u,10000)}},
+{name:'AllOrigins',fn:function(){return fetchX('https://api.allorigins.win/raw?url='+u,10000)}}
 ];
 (function trySrc(i){
 if(i>=sources.length){
@@ -667,7 +660,6 @@ var u=encodeURIComponent(FVT_URL);
 var sources=[
 {name:'Jina-F',fn:function(){return fetchX('https://r.jina.ai/'+FVT_URL,20000)}},
 {name:'Jina-T',fn:function(){return fetchX('https://r.jina.ai/https://fvt.com.tr/fon-tahminleri',20000)}},
-{name:'Netlify-T',fn:function(){return fetchX('/fvt-tahmin',10000)}},
 {name:'AllOrigins-T',fn:function(){return fetchX('https://api.allorigins.win/raw?url='+encodeURIComponent('https://fvt.com.tr/fon-tahminleri'),12000)}}
 ];
 (function trySrc(i){
